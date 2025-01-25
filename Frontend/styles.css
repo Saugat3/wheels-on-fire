@@ -6,110 +6,555 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
     color: #fff;
-    background-color: #1c1c1c;
+    background-color: #1c1921;
 }
 
 /* Header */
 header {
-    background-color: #0d8a0d;
-    padding: 15px 20px;
+    position: fixed;
+    z-index: 999;
+    background-color: #1C1921; /* Match the dark background color */
+    padding: 15px 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    color: white;
+    width: 100vw;
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: bold;
+    display: flex;
+}
+
+.logo img {
+    height: 60px; /* Adjust size as needed */
 }
 
 nav {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 50px;
 }
 
 nav a {
     text-decoration: none;
-    color: #fff;
+    color: white;
     font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #d4ffd4; /* Hover color */
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
 }
 
 .btn {
-    padding: 8px 15px;
-    background-color: #fff;
-    color: #0d8a0d;
+    font-family: 'Gabriel Sans', sans-serif;
+    padding: 10px 20px;
+    background-color: #0d8a0d;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .btn:hover {
+    background-color: #14a014;
+}
+
+.login-button {
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #181818;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
     background-color: #d4ffd4;
 }
 
-/* Hero Section */
-.hero {
-    text-align: center;
-    padding: 50px 20px;
-    background:  #121212;
+.login-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 10px 5%;
 }
 
-.hero h1 {
-    font-size: 48px;
+.login-container {
+    background-color: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #000;
+}
+
+.logo-container {
+    text-align: left;
     margin-bottom: 20px;
-    font-family: "Gabriel Sans-Trial", sans-serif;
-
 }
 
-.hero img {
-    max-width: 100%;
-    height: auto;
+.login-logo {
+    width: 25px;
+    height: 40px;
+    margin-bottom: 0px;
+    
+}
+
+.company-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    padding-left: 10px;    
+}
+
+h2 {
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+p {
+    text-align: justify;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    color: #048219;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background: #048219;
+}
+
+.signup-prompt {
+    text-align: center;
     margin-top: 20px;
 }
 
-/* Services Section */
-.services {
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.services h2 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #0d8a0d;
-}
-
-.service-cards {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.card {
-    background-color: #1d1d1d;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.card h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.card p {
+.signup-prompt p {
     font-size: 14px;
-    color: #bbb;
+    color: #555;
 }
+
+.signup-link {
+    color: #048219;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+/* signup overlay */
+
+.swal2-container {
+    z-index: 9999 !important;
+}
+
+
+.signup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.signup-container {
+    background-color: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+}
+
+h2 {
+    text-align: left;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 22px;
+}
+
+p {
+    text-align: justify;
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px; 
+    margin: 8px 0; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.name-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.name-field {
+    width: 48%;
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    align-items: center;
+    top: 65%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #000;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 35px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    background: #048219;
+}
+
+.login-prompt {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login-prompt p {
+    font-size: 14px;
+    color: #555;
+}
+
+.login-link {
+    color: #048219;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+
+/* Hero Section */
+.hero {
+    position: relative;
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    padding: 50px;
+    background: #1C1921;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensure no overflow */
+    transform: translateY(50px); /* Adjust this value to move it down */
+
+}
+
+@font-face {
+    font-family: 'Gabriel Sans';
+    src: url('./Images/gabrielsans.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gabriel Sans Normal';
+    src: url('./Images/gabrielsansnromal.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.hero h1 {
+    top: -30%;
+    font-family: 'Gabriel Sans', sans-serif;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2; /* Text stays above other elements */
+    letter-spacing: -0.4em;
+    color: white;
+}
+
+.hero .ride-more {
+    font-family: 'Gabriel Sans Normal', sans-serif;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #FFFFFF;
+    letter-spacing: -0.05em;
+}
+
+.hero .worry-less {
+    font-weight: bold;
+    color: transparent;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: 6rem;
+    letter-spacing: -0.05em;
+    line-height: 0.7;
+    z-index: 2; /* Ensure it stays visible */
+    position: relative;
+}
+
+.hero .worry {
+    margin-right: 20px;
+}
+
+.hero .less {
+    margin-left: 50px;
+}
+
+.bike-image {
+    position: absolute;
+    top: 60%; /* Adjust position for visibility */
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    z-index: 2; /* Place the bike below the text but above the glow */
+}
+
+.bg-image {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+    z-index: 0; /* Background is the lowest layer */
+}
+
+.green-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: #0DDA2C;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none; /* Prevent the glow from interfering with mouse interactions */
+    animation: pulse 4s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+}
+
+/*------------------------- How It Works Section -----------------------------------*/
+
+.how-it-works {
+    padding: 20px 80px;
+    background-color: #1C1921;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.how-it-works .section-heading {
+    font-family: 'Gabriel Sans', sans-serif;
+
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: transparent;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    -webkit-background-clip: text;
+    background-clip: text;
+        text-align: center;
+}
+
+.steps-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.step-card {
+    background: linear-gradient(0deg, #14541B 20%, #1A2418 50%, #1A1B1F 70%, #1C1921 100%);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 420px;
+    height: 370px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.step-icon {
+    font-size: 140px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.step-card h3 {
+    font-family: 'Gabriel Sans Normal', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.step-card p {
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat */
+    font-style: italic; /* Italic style */
+    font-weight: 300; /* Light weight */
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 1.2;
+    text-align: justify;
+}
+.see-more-btn {
+    display: inline-block;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
 
 /* Footer */
 footer {

@@ -3,48 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gabriel+Sans:wght@700&display=swap" rel="stylesheet">
+
+    <!-- link for sweet alert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Wheels On Fire</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">Wheels On Fire</div>
+        <div class="logo">
+            <img src="./Images/logo.png" alt="Wheels On Fire" />
+        </div>
         <nav>
             <a href="#">Home</a>
             <a href="#">About</a>
             <a href="#">Services</a>
             <a href="#">Contact</a>
         </nav>
-        <button class="btn">Book a Service</button>
+        <div class="buttons">
+            <button class="btn">BOOK A SERVICE</button>
+            <button class="login-button" onclick="toggleOverlay('login')">
+                Login <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </div>
     </header>
 
+     <!-- Login Overlay -->
+     <div id="login-overlay" class="login-overlay">
+        <div class="login-container">
+            <span class="close-btn" onclick="toggleOverlay('login')"><i class="fa-solid fa-x"></i></span>
+            <div class="logo-container">
+                <img src="./Images/login-logo.png" alt="WSF Logo" class="login-logo">
+                <span class="company-name">WheelsOnFire</span>
+            </div>
+            <h2>Login to Your Account</h2>
+            <p>Enter your credentials to access your account</p>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="example@example.com" class="form-input" required>
+                </div>
+                <div class="form-group password-container">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Password" class="form-input" required>
+                    <i class="fa-solid fa-eye" id="login-eye" onclick="togglePassword('login')"></i>
+                </div>
+                <a href="#" class="forgot-password">Forgot password?</a>
+                <button type="submit" class="login-btn">Login</button>
+                <div class="signup-prompt">
+                    <p>Don't have an account? <a href="#" class="signup-link" onclick="toggleOverlay('signup')">Signup</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   <!-- Signup Overlay -->
+    <div id="signup-overlay" class="signup-overlay">
+        <div class="signup-container">
+            <span class="close-btn" onclick="toggleOverlay('login')"><i class="fa-solid fa-x"></i></span>
+            <h2>Account Signup</h2>
+            <p>Fill in the details to create your account</p>
+            <form action="#" method="post">
+                <div class="form-group name-container">
+                    <div class="name-field">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" placeholder="First Name" class="form-input" required>
+                    </div>
+                    <div class="name-field">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" id="last-name" placeholder="Last Name" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="example@example.com" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-phone">Phone Number</label>
+                    <input type="tel" id="signup-phone" placeholder="Phone Number" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-address">Address</label>
+                    <input type="text" id="signup-address" placeholder="Address" class="form-input" required>
+                </div>
+                <div class="form-group password-container">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Password" class="form-input" required>
+                    <i class="fa-solid fa-eye" id="signup-eye" onclick="togglePassword('signup')"></i>
+                </div>
+                <div class="form-group password-container">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="form-input" required>
+                    <i class="fa-solid fa-eye" id="signup-confirm-eye" onclick="togglePassword('signup-confirm')"></i>
+                </div>
+                <button type="submit" class="signup-btn">Sign Up</button>
+                <div class="login-prompt">
+                    <p>Already have an account? <a href="#" class="login-link" onclick="toggleOverlay('login')">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
     
 
-    <-- Hero Section -->
-    <section class="hero">
-        <h1>RIDE MORE <br> WORRY LESS</h1>
-        <img src="bike.png" alt="Bike Image">
+    <!-- Hero Section -->
+    
+<section class="hero">
+    <h1><span class="ride-more">RIDE MORE</span><br><span class="worry-less"><span class="worry">WORRY</span> <span class="less">LESS</span></span></h1>
+    <img src="./Images/bike.png" alt="Bike Image" class="bike-image">
+        <img src="./Images/landing-bg.png" alt="Background Image" class="bg-image">
+        <div class="green-glow"></div>
+
     </section> 
 
-    <!-- Services Section -->
-    <section class="services">
-        <h2>The Ride Doctor</h2>
-        <div class="service-cards">
-            <div class="card">
-                <h3>Routine Maintenance</h3>
+       <!------------------------------------------- How It Works Section ---------------------------------------------------->
+       <div id="how-it-works" class="how-it-works">
+        <h2 class="section-heading">THE RIDE DOCTOR</h2>
+        <div class="steps-container">
+            <div class="step-card">
+                <i class="fas fa-tools step-icon"></i>
+                <h3>Routine Maintainence</h3>
                 <p>Keep your bike in top gear with regular checkups and oil changes. Smooth rides start here.</p>
             </div>
-            <div class="card">
+            <div class="step-card">
+                <i class="fa-solid fa-circle-arrow-up step-icon"></i>
                 <h3>Repairs and Upgrades</h3>
                 <p>Whether it’s a quick fix or a custom upgrade, our mechanics bring your vision to life.</p>
             </div>
-            <div class="card">
+            <div class="step-card">
+                <i class="fa-solid fa-sliders step-icon"></i>
                 <h3>Customization</h3>
                 <p>Make your bike one-of-a-kind. From decals to hardware, we turn your ideas into reality.</p>
             </div>
         </div>
-    </section>
+    
+        <!-- See More Button -->
+        <div class="see-more-container" style="text-align: center; margin-top: 20px;">
+            <a href="#services" class="see-more-btn">See More</a>
+        </div>
+    </div>
+    
+
+   
 
     <!-- Footer -->
     <footer>
@@ -58,7 +161,76 @@
         <p>We’re based in Kathmandu, Nepal<br>We work with clients from all over Nepal</p>
         <p>&copy; 2025 Wheels On Fire | All Rights Reserved</p>
     </footer>
+    <script>
+        // Function to open login or signup overlay
+        function toggleOverlay(type) {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
 
+            // Hide both overlays first
+            loginOverlay.style.display = 'none';
+            signupOverlay.style.display = 'none';
+
+            // Show the clicked overlay
+            if (type === 'login') {
+                loginOverlay.style.display = 'flex';
+            } else if (type === 'signup') {
+                signupOverlay.style.display = 'flex';
+            }
+        }
+
+        // Close overlay function to hide both login and signup overlays
+        function closeOverlays() {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
+            
+            loginOverlay.style.display = 'none';
+            signupOverlay.style.display = 'none';
+        }
+
+        // Function to toggle password visibility for login/signup
+        function togglePassword(type) {
+            let passwordField, eyeIcon;
+            if (type === 'signup') {
+                passwordField = document.getElementById('signup-password');
+                eyeIcon = document.getElementById('signup-eye');
+            } else if (type === 'signup-confirm') {
+                passwordField = document.getElementById('signup-confirm-password');
+                eyeIcon = document.getElementById('signup-confirm-eye');
+            } else if (type === 'login') {
+                passwordField = document.getElementById('login-password');
+                eyeIcon = document.getElementById('login-eye');
+            }
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Add event listeners to close buttons to close the respective overlay
+        document.querySelectorAll('.close-btn').forEach(button => {
+            button.addEventListener('click', closeOverlays);
+        });
+
+        // Optional: Close overlays when clicking outside the overlay content
+        window.addEventListener('click', function(event) {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
+            
+            // Close the overlay if clicking outside of the overlay content area
+            if (event.target === loginOverlay || event.target === signupOverlay) {
+                closeOverlays();
+            }
+        });
+
+    </script>
     <script src="script.js"></script>
+    <script src="login.js"></script>
+    <script src="signup.js"></script>
+
 </body>
 </html>

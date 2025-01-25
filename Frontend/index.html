@@ -21,8 +21,8 @@
         <nav>
             <a href="#">Home</a>
             <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Contact</a>
+            <a href="services.html">Services</a>
+            <a href="contact.html">Contact</a>
         </nav>
         <div class="buttons">
             <button class="btn">BOOK A SERVICE</button>
@@ -142,13 +142,10 @@
     
         <!-- See More Button -->
         <div class="see-more-container" style="text-align: center; margin-top: 20px;">
-            <a href="#services" class="see-more-btn">See More</a>
+            <a href="services.html" class="see-more-btn">See More</a>
         </div>
     </div>
     
-
-   
-
     <!-- Footer -->
     <footer>
         <div>
@@ -161,73 +158,7 @@
         <p>We’re based in Kathmandu, Nepal<br>We work with clients from all over Nepal</p>
         <p>&copy; 2025 Wheels On Fire | All Rights Reserved</p>
     </footer>
-    <script>
-        // Function to open login or signup overlay
-        function toggleOverlay(type) {
-            const loginOverlay = document.getElementById('login-overlay');
-            const signupOverlay = document.getElementById('signup-overlay');
-
-            // Hide both overlays first
-            loginOverlay.style.display = 'none';
-            signupOverlay.style.display = 'none';
-
-            // Show the clicked overlay
-            if (type === 'login') {
-                loginOverlay.style.display = 'flex';
-            } else if (type === 'signup') {
-                signupOverlay.style.display = 'flex';
-            }
-        }
-
-        // Close overlay function to hide both login and signup overlays
-        function closeOverlays() {
-            const loginOverlay = document.getElementById('login-overlay');
-            const signupOverlay = document.getElementById('signup-overlay');
-            
-            loginOverlay.style.display = 'none';
-            signupOverlay.style.display = 'none';
-        }
-
-        // Function to toggle password visibility for login/signup
-        function togglePassword(type) {
-            let passwordField, eyeIcon;
-            if (type === 'signup') {
-                passwordField = document.getElementById('signup-password');
-                eyeIcon = document.getElementById('signup-eye');
-            } else if (type === 'signup-confirm') {
-                passwordField = document.getElementById('signup-confirm-password');
-                eyeIcon = document.getElementById('signup-confirm-eye');
-            } else if (type === 'login') {
-                passwordField = document.getElementById('login-password');
-                eyeIcon = document.getElementById('login-eye');
-            }
-
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-
-        // Add event listeners to close buttons to close the respective overlay
-        document.querySelectorAll('.close-btn').forEach(button => {
-            button.addEventListener('click', closeOverlays);
-        });
-
-        // Optional: Close overlays when clicking outside the overlay content
-        window.addEventListener('click', function(event) {
-            const loginOverlay = document.getElementById('login-overlay');
-            const signupOverlay = document.getElementById('signup-overlay');
-            
-            // Close the overlay if clicking outside of the overlay content area
-            if (event.target === loginOverlay || event.target === signupOverlay) {
-                closeOverlays();
-            }
-        });
-
-    </script>
+    
     <script src="script.js"></script>
     <script src="login.js"></script>
     <script src="signup.js"></script>

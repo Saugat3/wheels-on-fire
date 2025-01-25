@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Save the JWT token and user role in local storage
             localStorage.setItem("token", responseData.token);
             localStorage.setItem("userRole", responseData.user.role);
+            localStorage.setItem("userId", responseData.user.id);
+
 
             // Display success message using SweetAlert2
             Swal.fire({

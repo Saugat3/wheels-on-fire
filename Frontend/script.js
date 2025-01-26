@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Page loaded successfully!");
 });
-
+// Add a click event listener to the button
+document.getElementById("bookServiceButton").addEventListener("click", function() {
+    // Redirect to services.html
+    window.location.href = "services.html";
+  });
  // Function to open login or signup overlay
  function toggleOverlay(type) {
     const loginOverlay = document.getElementById('login-overlay');

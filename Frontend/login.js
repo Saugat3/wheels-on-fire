@@ -78,9 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Redirect based on user role
                 const userRole = responseData.user.role;
                 if (userRole === 'admin') {
-                    window.location.href = "Admin/adminDashboard.html"; // Redirect to admin page
+                    window.location.href = "admindashboard.html"; // Redirect to admin page
                 } else if (userRole === 'user') {
-                    window.location.href = "User/userService.html"; // Redirect to user page
+                    window.location.href = "index.html"; // Redirect to user page
                 } else {
                     window.location.href = "index.html"; // Default redirect if role is unknown
                 }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Appointments</title>
+    <style>
+        /* Admin Dashboard Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .admin-dashboard {
+            padding: 20px;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        #appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #appointments-table th, #appointments-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        #appointments-table th {
+            background-color: #0DBF2A;
+            color: white;
+        }
+
+        #appointments-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #appointments-table tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="admin-dashboard" class="admin-dashboard">
+        <h2>Appointments Dashboard</h2>
+        <table id="appointments-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Vehicle Model</th>
+                    <th>Vehicle Year</th>
+                    <th>Company</th>
+                    <th>Appointment Date</th>
+                    <th>Appointment Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Appointment data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to fetch appointments and display them in the table
+        function fetchAppointments() {
+            fetch('/get-appointments')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('appointments-table').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = ''; // Clear any existing data
+
+                    data.forEach(appointment => {
+                        const row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${appointment.name}</td>
+                            <td>${appointment.email}</td>
+                            <td>${appointment.phone}</td>
+                            <td>${appointment.vehicleModel}</td>
+                            <td>${appointment.vehicleYear}</td>
+                            <td>${appointment.company}</td>
+                            <td>${appointment.appointmentDate}</td>
+                            <td>${appointment.appointmentTime}</td>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching appointments:', error);
+                });
+        }
+
+        // Call this function when the page is loaded
+        window.onload = fetchAppointments;
+    </script>
+</body>
+</html>

@@ -3,107 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Appointments</title>
-    <style>
-        /* Admin Dashboard Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        .admin-dashboard {
-            padding: 20px;
-            background-color: #ffffff;
-            min-height: 100vh;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #333;
-        }
-
-        #appointments-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        #appointments-table th, #appointments-table td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        #appointments-table th {
-            background-color: #0DBF2A;
-            color: white;
-        }
-
-        #appointments-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #appointments-table tr:hover {
-            background-color: #ddd;
-        }
-    </style>
+    <link rel="icon" href="../Frontend/Images/favicon.png" sizes="32x32" type="image/png">
+    <title>Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-    <div id="admin-dashboard" class="admin-dashboard">
-        <h2>Appointments Dashboard</h2>
-        <table id="appointments-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Vehicle Model</th>
-                    <th>Vehicle Year</th>
-                    <th>Company</th>
-                    <th>Appointment Date</th>
-                    <th>Appointment Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Appointment data will be populated here -->
-            </tbody>
-        </table>
+    <div class="sidebar">
+        <div class="logo"><img src="../Frontend/Images/logo.png" alt="logo-admin" ></div>
+        <nav class="nav-links">
+            <a href="#" class="nav-item active" data-page="appointments">
+                <i class="fas fa-calendar-alt"></i>
+                Appointments
+            </a>
+            <a href="#" class="nav-item" data-page="mechanics">
+                <i class="fas fa-wrench"></i>
+                Mechanics
+            </a>
+            <a href="#" class="nav-item" data-page="users">
+                <i class="fas fa-users"></i>
+                Users
+            </a>
+        </nav>
+        <a href="#" class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
     </div>
 
-    <script>
-        // Function to fetch appointments and display them in the table
-        function fetchAppointments() {
-            fetch('/get-appointments')
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('appointments-table').getElementsByTagName('tbody')[0];
-                    tableBody.innerHTML = ''; // Clear any existing data
+    <div class="main-content">
+        <div class="header">
+            <h1 id="page-title">Appointments</h1>
+        </div>
+        <div class="content-area">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search...">
+            </div>
+            
+            <!-- Dynamic content container -->
+            <div id="dynamic-content">
+                <!-- Content will be loaded here based on active section -->
+            </div>
+        </div>
+    </div>
 
-                    data.forEach(appointment => {
-                        const row = tableBody.insertRow();
-                        row.innerHTML = `
-                            <td>${appointment.name}</td>
-                            <td>${appointment.email}</td>
-                            <td>${appointment.phone}</td>
-                            <td>${appointment.vehicleModel}</td>
-                            <td>${appointment.vehicleYear}</td>
-                            <td>${appointment.company}</td>
-                            <td>${appointment.appointmentDate}</td>
-                            <td>${appointment.appointmentTime}</td>
-                        `;
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching appointments:', error);
-                });
-        }
+    <!-- User Modal -->
+    <div class="user-modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add New User</h2>
+                <button class="close-modal" onclick="closeUserModal()">&times;</button>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" id="role" required>
+                </div>
+                <button type="submit" class="save-btn">Save User</button>
+            </form>
+        </div>
+    </div>
 
-        // Call this function when the page is loaded
-        window.onload = fetchAppointments;
-    </script>
+    <script src="admindashboard.js"></script>
 </body>
 </html>

@@ -1,14 +1,22 @@
 const express = require('express');
-const { getAllUsers, getUserById } = require('../controller/userController');
-const { jwtAuthMiddleware } = require("../jwt");
-
-
 const router = express.Router();
+const {
+  getAllUsers,
+  getUserById,
+  deleteUserById,
+  updateUserById,
+} = require('../controller/userController');
 
-// Route to get all users
+// GET all users
 router.get('/users', getAllUsers);
 
-// Route to get a single user by ID
-router.get('/users/:userId',jwtAuthMiddleware, getUserById);
+// GET single user by ID
+router.get('/users/:id', getUserById);
+
+// DELETE a user by ID
+router.delete('/users/:id', deleteUserById);
+
+// UPDATE a user by ID
+router.put('/users/:id', updateUserById);
 
 module.exports = router;

@@ -1,36 +1,59 @@
-const User = require('../models/user.model');
+const User = require('../models/user.model'); // Adjust path as needed
 
-// Controller to fetch all users
+// GET all users with role 'user'
 const getAllUsers = async (req, res) => {
-    try {
-      const users = await User.find(); // Retrieve all users from the database
-      res.status(200).json(users);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
-  
- // Controller to fetch user details by ID
-const getUserById = async (req, res) => {
-    try {
-        const userId = req.params.userId;
-
-        // // Ensure the requesting user can only access their own details (or apply role-based checks)
-        // if (req.user._id !== userId && req.user.role !== "user") {
-        //     return res.status(403).json({ message: "Access denied." });
-        // }
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        res.status(200).json(user);
-    } catch (error) {
-        console.error("Error fetching user details:", error);
-        res.status(500).json({ message: "Server error." });
-    }
+  try {
+    const users = await User.find({ role: 'user' }); // Filter by role
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-  module.exports = { getAllUsers, getUserById };
+
+// GET a single user by ID
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// DELETE a user by ID
+const deleteUserById = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// UPDATE a user by ID
+const updateUserById = async (req, res) => {
+  try {
+    const updates = req.body; // Make sure to validate input
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getAllUsers,
+  getUserById,
+  deleteUserById,
+  updateUserById,
+};

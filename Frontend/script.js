@@ -86,20 +86,4 @@ document.addEventListener('mousemove', function(event) {
     }, 50); // Slight delay before applying the position change
 });
 
-// Function to open the booking modal and set the service name
-function openBookingModal(serviceName) {
-    document.getElementById("booking-modal").style.display = "flex";
-    document.getElementById("service-name").textContent = serviceName;
-}
 
-// Function to close the booking modal
-function closeBookingModal() {
-    document.getElementById("booking-modal").style.display = "none";
-}
-
-// Handle form submission (basic placeholder for now)
-document.getElementById("booking-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    alert("Your appointment has been booked successfully!");
-    closeBookingModal();
-});

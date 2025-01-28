@@ -1,0 +1,345 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #1c1921;
+    color: #fff;
+}
+
+.sidebar {
+    width: 280px;
+    background: linear-gradient(0deg, #14541B 20%, #1A2418 50%, #1A1B1F 70%, #1C1921 100%);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    float: left; /* Moves the logo to the left */
+    margin-right: 10px;
+    margin-bottom: 40px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.logo img {
+width: 150px; /* Adjust the width as needed */
+height: auto; /* Maintains the aspect ratio */
+max-width: 100%; /* Prevents overflow */
+}
+.nav-links {
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.nav-item:hover {
+    background: rgba(13, 191, 42, 0.1);
+    color: #0DBF2A;
+}
+
+.nav-item.active {
+    background: rgba(13, 191, 42, 0.15);
+    color: #0DBF2A;
+}
+
+.nav-item i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.logout {
+    padding: 15px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    margin-top: auto;
+}
+
+.logout:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.logout i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #1c1921;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-left: 30px;
+    margin-top: 40px;
+    background-color: #fff;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.content-area {
+background-color: #1c1921;            border-radius: 20px;
+    padding: 25px;
+    min-height: 500px;
+    box-shadow: 0 10px 25px rgba(0, 255, 60, 0.15);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex-grow: 1;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-bar i {
+    color: rgba(255, 255, 255, 0.5);
+}
+.swal-confirm-button {
+background-color: green !important; /* Green button color */
+color: white !important; /* Text color */
+border: none !important; /* Remove borders */
+outline: none !important; /* Remove focus outline */
+}
+
+.swal-cancel-button {
+background-color: red !important; /* Optional: Red cancel button */
+color: white !important;
+border: none !important;
+outline: none !important;
+}
+.add-user-btn {
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.3s;
+}
+
+.add-user-btn:hover {
+    transform: translateY(-2px);
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-table th:nth-child(1) , .user-table th:nth-child(2){
+    width: 30%;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #2b2b2b;
+    padding: 8px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #14541B;
+    font-weight: bold;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.edit-btn {
+    background: rgba(13, 191, 42, 0.1);
+    color: #0DBF2A;
+}
+
+.edit-btn:hover {
+    background: rgba(13, 191, 42, 0.2);
+}
+
+.delete-btn {
+    background: rgba(255, 59, 59, 0.1);
+    color: #ff3b3b;
+}
+
+.delete-btn:hover {
+    background: rgba(255, 59, 59, 0.2);
+}
+
+/* User Modal Styles */
+.user-modal {
+    display: none;
+    position: fixed;
+    
+    top: 10%;
+    left: 35%;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: linear-gradient(0deg, #14541B 20%, #1A2418 50%, #1A1B1F 70%, #1C1921 100%);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    color: #0DBF2A;
+    font-size: 20px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #fff;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0DBF2A;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+}
+ /* Adding styles for appointments section */
+.appointments-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 20px;
+padding: 20px 0;
+}
+
+.appointment-card {
+background: rgba(255, 255, 255, 0.05);
+border-radius: 15px;
+padding: 20px;
+border: 1px solid rgba(13, 191, 42, 0.1);
+}
+
+/* Adding styles for mechanics section */
+.mechanics-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 20px;
+padding: 20px 0;
+}
+
+.mechanic-card {
+background: rgba(255, 255, 255, 0.05);
+border-radius: 15px;
+padding: 20px;
+border: 1px solid rgba(13, 191, 42, 0.1);
+}

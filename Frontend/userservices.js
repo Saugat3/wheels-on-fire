@@ -1,12 +1,49 @@
+// Function to fetch mechanics from the backend and populate the dropdown
+async function populateMechanicDropdown() {
+    try {
+        // Fetching mechanics data from the backend
+        const response = await fetch('http://localhost:3000/api/mechanics'); // Update the URL to your backend
+        const mechanics = await response.json();
+
+        // Get the mechanic dropdown element
+        const mechanicSelect = document.getElementById("mechanic");
+
+        // Clear any existing options
+        mechanicSelect.innerHTML = '<option value="">Select a Mechanic</option>';
+
+        // Loop through mechanics and create option elements
+        mechanics.forEach(mechanic => {
+            const option = document.createElement("option");
+            // option.value = mechanic._id; // You can use the mechanic's ID as the value
+            option.textContent = mechanic.name; // Display mechanic's name in the dropdown
+            mechanicSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching mechanics:', error);
+        // Optionally show an error message to the user
+    }
+}
+
+// Call the function to populate the mechanic dropdown when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    populateMechanicDropdown();
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Page loaded successfully!");
 });
 function generateTimeSlots() {
     const timeSlots = [
-        "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM",
-        "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
-    ];  // List of time slots (you can modify this)
+        "9:00 AM - 10:00 AM",
+        "10:00 AM - 11:00 AM",
+        "11:00 AM - 12:00 PM",
+        "12:00 PM - 1:00 PM",
+        "1:00 PM - 2:00 PM",
+        "2:00 PM - 3:00 PM",
+        "3:00 PM - 4:00 PM",
+        "4:00 PM - 5:00 PM",
+    ];
+     // List of time slots (you can modify this)
 
     const timeSelect = document.getElementById("appointment-time");
 
@@ -133,8 +170,6 @@ function handleCardClick(serviceName) {
     }
 }
 
-
-
 // Open the booking modal and populate fields
 async function openBookingModal(serviceName) {
     const modal = document.querySelector(".booking-modal");
@@ -142,27 +177,116 @@ async function openBookingModal(serviceName) {
 
     serviceField.textContent = `Service: ${serviceName}`; // Set the service name
 
+    // Store the service name in a hidden input field for submission
+    document.getElementById('service-name-input').value = serviceName; 
 
     modal.style.display = "block"; // Show modal
 }
+async function submitBookingForm(event) {
+    event.preventDefault();
+    
+    // Collect form data
+    const form = document.getElementById('booking-form');
+    const formData = new FormData(form);
+    
+    // Log formData to ensure it's being collected properly
+    console.log('Form Data:', formData);
 
-// Close the booking modal
-function closeBookingModal() {
-    document.querySelector(".booking-modal").style.display = "none";
-}
+    const serviceName = formData.get('service-name'); // Get service name from hidden input
+    console.log('Service Name:', serviceName); // Check if service name is correctly populated
 
-// Close modal if the user clicks outside the modal
-window.onclick = function (event) {
-    const modal = document.querySelector(".booking-modal");
-    if (event.target == modal) {
-        closeBookingModal();
+    if (!serviceName) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Please select a service to book.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'swal-confirm-btn',
+            },
+        });
+        return;
     }
-};
 
-// Handle booking form submission
-function submitBookingForm(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-    // Handle form data submission here
-    console.log("Booking form submitted.");
-    closeBookingModal();
+    const bookingData = {
+        serviceName: serviceName,
+        vehicleCompany: formData.get('vehicle-company'),
+        vehicleModel: formData.get('vehicle-model'),
+        vehicleYear: formData.get('vehicle-year'),
+        vehicleNumber: formData.get('vehicle-number'),
+        appointmentDate: formData.get('appointment-date'),
+        appointmentTime: formData.get('appointment-time'),
+        mechanic: formData.get('mechanic'),
+    };
+    
+    console.log('Booking data:', bookingData);
+
+    // Check if any required field is empty
+    for (const key in bookingData) {
+        if (!bookingData[key]) {
+            console.error(`Missing field: ${key}`);
+            Swal.fire({
+                title: 'Error!',
+                text: `Please fill out all fields. Missing: ${key}`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'swal-confirm-btn',
+                },
+            });
+            return; // Prevent form submission if any field is missing
+        }
+    }
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/appointments/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bookingData),
+        });
+
+        const data = await response.json();
+        console.log('Server response:', data);
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your appointment has been scheduled.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'swal-confirm-btn',
+                },
+            });
+            form.reset();
+            closeBookingModal();
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: data.message || 'Something went wrong. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'swal-confirm-btn',
+                },
+            });
+        }
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'There was a problem with the request. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'swal-confirm-btn',
+            },
+        });
+    }
+}
+function closeBookingModal() {
+    const modal = document.querySelector(".booking-modal");
+    modal.style.display = "none"; // Hide the modal
 }

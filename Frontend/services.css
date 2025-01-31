@@ -689,7 +689,7 @@ select:focus {
 }
 /* Styling for the options inside the dropdown */
 select option {
-    background-color: black;
+    background-color: #1c1921;
     color: white;
 }
 

@@ -21,7 +21,7 @@
         </div>
         <nav>
             <a href="index.html">Home</a>
-            <a href="about.html">Mechanics</a>
+            <a href="mechanics.html">Mechanics</a>
             <a href="services.html">Services</a>
             <a href="contact.html">Contact</a>
         </nav>
@@ -195,8 +195,12 @@
               <div class="form-section">
                 <!-- <h2>Book Your Service</h2> -->
                 <div class="service-name" id="service-name"></div>
+                <!-- Hidden field to store service name -->
+
                 
                 <form id="booking-form" onsubmit="submitBookingForm(event)">
+                    <input type="hidden" name="service-name" id="service-name-input" value="">
+
                   <div class="form-grid">
                     
                     <div class="form-group">
@@ -218,8 +222,6 @@
                       <label for="vehicle-number">Registration Number</label>
                       <input type="text" id="vehicle-number" name="vehicle-number" required />
                     </div>
-
-                  
                     
                     <div class="form-group">
                       <label for="appointment-date">Preferred Date</label>
@@ -251,8 +253,7 @@
     <!-- <footer>
         <p>&copy; 2025 Wheels On Fire. All Rights Reserved.</p>
     </footer> -->
-<script>
-</script>
+
     <script src="login.js"></script>    <script src="userservices.js"></script>
     <script src="signup.js"></script>
 

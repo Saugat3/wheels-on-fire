@@ -1,4 +1,192 @@
-const API_URL = 'http://localhost:3000/api/users'; // Replace with your backend URL
+const API_URL = 'http://localhost:3000/api/users'; 
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Set "Appointments" as the default section
+    const activeSection = document.querySelector('.nav-item.active');
+    if (!activeSection) {
+        // If no section is active, set "Appointments" as the active section by default
+        const appointmentsNavItem = document.querySelector('.nav-item[data-page="appointments"]');
+        appointmentsNavItem.classList.add('active');
+        loadAppointmentsSection();
+    } else {
+        // If a section is already active, load the corresponding content
+        const activePage = activeSection.getAttribute('data-page');
+        if (activePage === 'appointments') {
+            loadAppointmentsSection();
+        }
+    }
+});
+
+// Navigation logic for the other sections
+document.querySelectorAll('.nav-item').forEach(navItem => {
+    navItem.addEventListener('click', () => {
+        document.querySelector('.nav-item.active').classList.remove('active');
+        navItem.classList.add('active');
+        const pageTitle = document.getElementById('page-title');
+        pageTitle.textContent = navItem.textContent.trim();
+        const page = navItem.getAttribute('data-page');
+
+        // Load content based on active section
+        if (page === 'appointments') {
+            loadAppointmentsSection();
+        } else if (page === 'mechanics') {
+            loadMechanicsSection();
+        } else if (page === 'users') {
+            loadUsersSection();
+        } else {
+            document.getElementById('dynamic-content').innerHTML = `<p>${page} content goes here.</p>`;
+        }
+    });
+});
+
+// Load Appointments Section
+async function loadAppointmentsSection() {
+    const dynamicContent = document.getElementById('dynamic-content');
+    dynamicContent.innerHTML = '<p>Loading appointments...</p>'; // Loading indicator
+
+    try {
+        const response = await fetch('http://localhost:3000/api/appointments');
+        if (!response.ok) throw new Error('Failed to fetch appointments');
+        const appointments = await response.json();
+        renderAppointmentsTable(appointments);
+    } catch (error) {
+        console.error('Error loading appointments:', error);
+        dynamicContent.innerHTML = '<p>Failed to load appointments. Please try again later.</p>';
+    }
+}
+
+
+// Attach the event listener to the status dropdown
+function renderAppointmentsTable(appointments) {
+    const dynamicContent = document.getElementById('dynamic-content');
+    dynamicContent.innerHTML = ''; // Clear existing content
+
+    const table = document.createElement('table');
+    table.classList.add('appointments-table'); // Add a class for styling (optional)
+
+    const headers = ['Service Name', 'Vehicle Company', 'Vehicle Model', 'Vehicle Year', 'Vehicle Number', 'Appointment Date', 'Appointment Time', 'Mechanic', 'Status', 'Actions'];
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    appointments.forEach(appointment => {
+        const row = document.createElement('tr');
+        
+        // Create status dropdown
+        const statusOptions = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+        const statusSelect = document.createElement('select');
+        statusOptions.forEach(status => {
+            const option = document.createElement('option');
+            option.value = status;
+            option.textContent = status;
+            if (status === appointment.status) {
+                option.selected = true;
+            }
+            statusSelect.appendChild(option);
+        });
+
+        // Add event listener to handle status change
+        statusSelect.addEventListener('change', (event) => {
+            handleStatusChange(appointment._id, event.target.value);
+        });
+
+        row.innerHTML = `
+            <td>${appointment.serviceName}</td>
+            <td>${appointment.vehicleCompany}</td>
+            <td>${appointment.vehicleModel}</td>
+            <td>${appointment.vehicleYear}</td>
+            <td>${appointment.vehicleNumber}</td>
+            <td>${appointment.appointmentDate}</td>
+            <td>${appointment.appointmentTime}</td>
+            <td>${appointment.mechanic}</td>
+            <td>
+                ${statusSelect.outerHTML} <!-- Add dropdown for status -->
+            </td>
+            <td>
+                <button class="delete-btn" onclick="deleteAppointment('${appointment._id}')">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+
+    dynamicContent.appendChild(table);
+}
+// Add event listener to handle status change
+function handleStatusChange(appointmentId, newStatus) {
+    fetch(`http://localhost:3000/api/appointments/${appointmentId}`, {
+        method: 'PUT', // Assuming you have a PATCH route to update the status
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Status updated:', data);
+    })
+    .catch(error => {
+        console.error('Error updating status:', error);
+    });
+}
+
+
+// Function to delete an appointment
+async function deleteAppointment(id) {
+    try {
+        const response = await fetch(`${appointmentAPI_URL}/${id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Failed to delete appointment');
+        alert('Appointment deleted successfully!');
+        loadAppointmentsSection(); // Reload the appointments section after deletion
+    } catch (error) {
+        console.error('Error deleting appointment:', error);
+        alert('Failed to delete appointment. Please try again.');
+    }
+}
+
+// Event listener for navigation items
+document.querySelectorAll('.nav-item').forEach(navItem => {
+    navItem.addEventListener('click', () => {
+        // Remove active class from the previous active item
+        document.querySelector('.nav-item.active').classList.remove('active');
+        
+        // Add active class to the clicked item
+        navItem.classList.add('active');
+        
+        // Update the page title
+        const pageTitle = document.getElementById('page-title');
+        pageTitle.textContent = navItem.textContent.trim();
+        
+        const page = navItem.getAttribute('data-page');
+        
+        // Load the appropriate section based on the selected page
+        if (page === 'appointments') {
+            loadAppointmentsSection();
+        } else if (page === 'mechanics') {
+            loadMechanicsSection();
+        } else if (page === 'users') {
+            dynamicContent.innerHTML = `<p>Users content goes here.</p>`;
+        }
+    });
+});
+
+// Automatically load the Appointments section by default on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Automatically trigger the "appointments" section
+    const defaultPage = 'appointments';
+    document.querySelector(`[data-page="${defaultPage}"]`).classList.add('active'); // Make appointments active
+    loadAppointmentsSection(); // Load the appointments section
+});
+
 
 // Navigation logic
 document.querySelectorAll('.nav-item').forEach(navItem => {
@@ -175,3 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadUsersSection();
     }
 });
+
+
+

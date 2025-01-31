@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <div class="logo"><img src="../Frontend/Images/logo.png" alt="logo-admin" ></div>
+        <div class="logo"><img src="../Frontend/Images/logo.png" alt="logo-admin"></div>
         <nav class="nav-links">
             <a href="#" class="nav-item active" data-page="appointments">
                 <i class="fas fa-calendar-alt"></i>
@@ -37,10 +37,7 @@
             <h1 id="page-title">Appointments</h1>
         </div>
         <div class="content-area">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search...">
-            </div>
+            
             
             <!-- Dynamic content container -->
             <div id="dynamic-content">
@@ -49,35 +46,46 @@
         </div>
     </div>
 
-    <!-- User Modal -->
-    <div class="user-modal" id="userModal">
+    <!-- Mechanic Modal -->
+    <div class="mechanic-modal" id="mechanicModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Add New User</h2>
-                <button class="close-modal" onclick="closeUserModal()">&times;</button>
+                <h2 class="modal-title" id="mechanicModalTitle">Add New Mechanic</h2>
+                <button class="close-modal" onclick="closeMechanicModal()">&times;</button>
             </div>
-            <form id="userForm">
+            <form id="mechanicForm" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" required>
+                    <label for="mechanicName">Name</label>
+                    <input type="text" id="mechanicName" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
+                    <label for="specialization">Specialization</label>
+                    <input type="text" id="specialization" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" required>
+                    <input type="hidden" id="existingPhoto">
+<img id="photoPreview" style="width: 100px; height: 100px; display: none;">
+
+                    <label for="photo">Photo</label>
+                    <input type="file" id="photo">
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Experience (Years)</label>
+                    <input type="number" id="experience" required>
                 </div>
                 <div class="form-group">
-                    <label for="role">Role</label>
-                    <input type="text" id="role" required>
+                    <label for="description">Description</label>
+                    <textarea id="description" required></textarea>
                 </div>
-                <button type="submit" class="save-btn">Save User</button>
+                <button type="submit" class="save-btn">Save Mechanic</button>
             </form>
         </div>
     </div>
 
+    <!-- <script src="admin.appointment.js"></script> -->
+    <script src="admin.mechanic.js"></script>
     <script src="admindashboard.js"></script>
+    
 </body>
 </html>

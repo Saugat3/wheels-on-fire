@@ -6,11 +6,13 @@ const cors = require('cors');
 const routes = require('./routes/index.routes'); // Importing index routes
 const app = express();
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 dotenv.config();
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection
 const connectDB = require('./config/db');

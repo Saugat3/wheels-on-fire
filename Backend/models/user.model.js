@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const userSchema = new Schema(
   {
     firstName: {
@@ -25,20 +26,27 @@ const userSchema = new Schema(
       required: true,
       validate: {
         validator: function (value) {
-          // Regular expression to check if the address ends with one of the districts
-          return /(Kathmandu|Lalitpur|Bhaktapur)$/i.test(value);
+          // Regex to match the format: [specific place], [district]
+          return /^[a-zA-Z\s]+,\s*(Kathmandu|Lalitpur|Bhaktapur)$/i.test(value);
         },
-        message: 'Address must end with one of the districts: Kathmandu, Lalitpur, Bhaktapur',
+        message: 'Address must be in the format: [specific place], [district] (e.g., Imadol, Lalitpur)',
       },
     },
     password: {
       type: String,
       required: true,
     },
+    verificationCode: {
+      type: Number, // Store verification code temporarily
+    },
+    isVerified: {
+      type: Boolean,
+      default: false, // Initially false
+    },
     role: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user', // Default role is user
+      enum: ['user', 'staff', 'admin'],
+      default: 'user',
     },
   },
   { collection: 'Users' }

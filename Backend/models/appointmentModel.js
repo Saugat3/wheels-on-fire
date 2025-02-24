@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // Define the Appointment Schema
 const appointmentSchema = new mongoose.Schema({
-  serviceName: { type: String, required: true },  // Add service name
+  serviceName: { type: String, required: true },
   vehicleCompany: { type: String, required: true },
   vehicleModel: { type: String, required: true },
   vehicleYear: { type: Number, required: true },
@@ -13,11 +14,21 @@ const appointmentSchema = new mongoose.Schema({
   status: { 
     type: String, 
     enum: ['Pending', 'In Progress', 'Completed', 'Cancelled'], 
-    default: 'Pending' // Default status is 'Pending'
+    default: 'Pending' 
+  },
+  user: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
+  userDetails: {  // Store user details
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
   }
 }, { timestamps: true });
 
-// Create the model from the schema
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 
 module.exports = Appointment;

@@ -1,10 +1,10 @@
+// Handle signup form submission
 document.addEventListener("DOMContentLoaded", () => {
     const signupForm = document.querySelector("#signup-overlay form");
 
     signupForm.addEventListener("submit", async (event) => {
         event.preventDefault(); // Prevent default form submission
 
-        // Gather form data
         const formData = {
             firstName: document.querySelector("#first-name").value,
             lastName: document.querySelector("#last-name").value,
@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            // Send a POST request to the backend
             const response = await fetch("http://localhost:3000/api/signup", { 
                 method: "POST",
                 headers: {
@@ -25,13 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(formData),
             });
 
-            // Parse response
             const responseData = await response.json();
 
             if (!response.ok) {
-                // Display validation or server error messages
                 if (responseData.errors) {
-                    // Display validation errors properly with SweetAlert2
                     const errorMessages = responseData.errors.map(error => error.message).join("\n- ");
                     Swal.fire({
                         title: 'Validation Errors',
@@ -48,46 +44,93 @@ document.addEventListener("DOMContentLoaded", () => {
                         confirmButtonText: 'Ok',
                         confirmButtonColor: '#1A73E8'
                     });
-                } else {
-                    Swal.fire({
-                        title: 'Unknown Error',
-                        text: "An unknown error occurred. Please try again.",
-                        icon: 'error',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: '#1A73E8'
-                    });
                 }
                 return;
             }
 
-            // Display success message using SweetAlert2
+            // Instead of immediately showing a success message, open the verification overlay
+            toggleOverlay('verification');
+
+            // Show success message with instructions to check email for the verification code
             Swal.fire({
-                title: 'Success!',
-                text: responseData.message || "User created successfully!",
+                title: 'Verification Email Sent!',
+                text: "Please check your email for the verification code.",
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#1A73E8'
+            });
+
+        } catch (error) {
+            console.error("Error during signup:", error);
+            Swal.fire({
+                title: 'Unexpected Error',
+                text: "An unexpected error occurred. Please try again later.",
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#1A73E8'
+            });
+        }
+    });
+
+    // Handle verification form submission
+    const verificationForm = document.querySelector("#verification-form");
+
+    verificationForm.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const verificationCode = document.querySelector("#verification-code").value;
+
+        try {
+            const formData = {
+                email: document.querySelector("#signup-email").value, // The email entered during signup
+                code: verificationCode
+            };
+
+            const response = await fetch("http://localhost:3000/api/verify-code", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                Swal.fire({
+                    title: 'Error',
+                    text: responseData.error || 'Verification failed. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: '#1A73E8'
+                });
+                return;
+            }
+
+            // Successful verification
+            Swal.fire({
+                title: 'Email Verified!',
+                text: responseData.message || 'Your email has been successfully verified.',
                 icon: 'success',
                 confirmButtonText: 'Ok',
                 confirmButtonColor: '#1A73E8'
             }).then(() => {
-                // Reset the form fields after success
-                signupForm.reset(); // This resets all fields to their initial values (empty for text fields)
+                // Save the JWT token and user info in local storage
+                localStorage.setItem("token", responseData.token);
+                localStorage.setItem("userRole", responseData.user.role);
+                localStorage.setItem("userId", responseData.user.id);
 
-                // Optionally, reset visibility toggles for password fields
-                const passwordEyeIcon = document.getElementById('signup-eye');
-                const confirmPasswordEyeIcon = document.getElementById('signup-confirm-eye');
-                if (passwordEyeIcon) {
-                    passwordEyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-                    document.getElementById('signup-password').type = 'password';
+                // Redirect user based on role after successful signup
+                const userRole = responseData.user.role;
+                // If the role is user, redirect to user service page
+                if (userRole === 'user') {
+                    window.location.href = "../Frontend/services.html"; // Redirect to user page
+                } else {
+                    window.location.href = "index.html"; // Default redirect if role is unknown or other roles
                 }
-                if (confirmPasswordEyeIcon) {
-                    confirmPasswordEyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-                    document.getElementById('signup-confirm-password').type = 'password';
-                }
-
-                // Optionally, close the overlay after successful signup
-                toggleOverlay('login');
             });
         } catch (error) {
-            console.error("Error during signup:", error);
+            console.error("Error during verification:", error);
             Swal.fire({
                 title: 'Unexpected Error',
                 text: "An unexpected error occurred. Please try again later.",

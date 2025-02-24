@@ -208,7 +208,22 @@ async function submitBookingForm(event) {
         return;
     }
 
+    const userId = localStorage.getItem('userId'); // Fetch userId from localStorage
+    if (!userId) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'User not logged in. Please log in to book a service.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'swal-confirm-btn',
+            },
+        });
+        return;
+    }
+
     const bookingData = {
+        userId: userId, // Add userId to bookingData
         serviceName: serviceName,
         vehicleCompany: formData.get('vehicle-company'),
         vehicleModel: formData.get('vehicle-model'),
@@ -286,6 +301,7 @@ async function submitBookingForm(event) {
         });
     }
 }
+
 function closeBookingModal() {
     const modal = document.querySelector(".booking-modal");
     modal.style.display = "none"; // Hide the modal

@@ -40,12 +40,36 @@ document.querySelectorAll('.nav-item').forEach(navItem => {
 });
 
 // Load Appointments Section
+document.addEventListener('DOMContentLoaded', () => {
+    // Set "Appointments" as the default section
+    const activeSection = document.querySelector('.nav-item.active');
+    if (!activeSection) {
+        // If no section is active, set "Appointments" as the active section by default
+        const appointmentsNavItem = document.querySelector('.nav-item[data-page="appointments"]');
+        appointmentsNavItem.classList.add('active');
+        loadAppointmentsSection();
+    } else {
+        // If a section is already active, load the corresponding content
+        const activePage = activeSection.getAttribute('data-page');
+        if (activePage === 'appointments') {
+            loadAppointmentsSection();
+        }
+    }
+});
+
+// Function to load the appointments section
 async function loadAppointmentsSection() {
     const dynamicContent = document.getElementById('dynamic-content');
     dynamicContent.innerHTML = '<p>Loading appointments...</p>'; // Loading indicator
 
     try {
-        const response = await fetch('http://localhost:3000/api/appointments');
+        const userId = localStorage.getItem('userId'); // Get user ID from local storage
+        if (!userId) {
+            alert('User not logged in.');
+            return;
+        }
+
+        const response = await fetch(`http://localhost:3000/api/appointments?userId=${userId}`);
         if (!response.ok) throw new Error('Failed to fetch appointments');
         const appointments = await response.json();
         renderAppointmentsTable(appointments);
@@ -55,16 +79,15 @@ async function loadAppointmentsSection() {
     }
 }
 
-
-// Attach the event listener to the status dropdown
 function renderAppointmentsTable(appointments) {
     const dynamicContent = document.getElementById('dynamic-content');
     dynamicContent.innerHTML = ''; // Clear existing content
 
     const table = document.createElement('table');
-    table.classList.add('appointments-table'); // Add a class for styling (optional)
+    table.classList.add('appointments-table'); // Add a class for styling
 
-    const headers = ['Service Name', 'Vehicle Company', 'Vehicle Model', 'Vehicle Year', 'Vehicle Number', 'Appointment Date', 'Appointment Time', 'Mechanic', 'Status', 'Actions'];
+    // Updated headers to show user details
+    const headers = ['User Name', 'Service Name', 'Email', 'Phone Number', 'Status', 'Actions'];
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
     headers.forEach(header => {
@@ -78,70 +101,87 @@ function renderAppointmentsTable(appointments) {
     const tbody = document.createElement('tbody');
     appointments.forEach(appointment => {
         const row = document.createElement('tr');
+
+        // Get user details from userDetails field in appointment
+        const userDetails = appointment.userDetails; 
         
-        // Create status dropdown
-        const statusOptions = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
-        const statusSelect = document.createElement('select');
-        statusOptions.forEach(status => {
-            const option = document.createElement('option');
-            option.value = status;
-            option.textContent = status;
-            if (status === appointment.status) {
-                option.selected = true;
-            }
-            statusSelect.appendChild(option);
-        });
-
-        // Add event listener to handle status change
-        statusSelect.addEventListener('change', (event) => {
-            handleStatusChange(appointment._id, event.target.value);
-        });
-
         row.innerHTML = `
+            <td>${userDetails.firstName} ${userDetails.lastName}</td>  <!-- User Name -->
             <td>${appointment.serviceName}</td>
-            <td>${appointment.vehicleCompany}</td>
-            <td>${appointment.vehicleModel}</td>
-            <td>${appointment.vehicleYear}</td>
-            <td>${appointment.vehicleNumber}</td>
-            <td>${appointment.appointmentDate}</td>
-            <td>${appointment.appointmentTime}</td>
-            <td>${appointment.mechanic}</td>
+            <td>${userDetails.email}</td>  <!-- User Email -->
+            <td>${userDetails.phoneNumber}</td>  <!-- User Phone Number -->
+            <td>${appointment.status}</td> <!-- Status -->
             <td>
-                ${statusSelect.outerHTML} <!-- Add dropdown for status -->
-            </td>
-            <td>
+                <button class="details-btn" onclick='showAppointmentDetails(${JSON.stringify(appointment)})'>Show Details</button>
                 <button class="delete-btn" onclick="deleteAppointment('${appointment._id}')">Delete</button>
             </td>
         `;
+
         tbody.appendChild(row);
     });
-    table.appendChild(tbody);
 
+    table.appendChild(tbody);
     dynamicContent.appendChild(table);
 }
-// Add event listener to handle status change
-function handleStatusChange(appointmentId, newStatus) {
-    fetch(`http://localhost:3000/api/appointments/${appointmentId}`, {
-        method: 'PUT', // Assuming you have a PATCH route to update the status
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Status updated:', data);
-    })
-    .catch(error => {
-        console.error('Error updating status:', error);
-    });
+
+
+function showAppointmentDetails(appointment) {
+    const modal = document.getElementById('appointmentModal');
+    const modalBody = document.getElementById('modal-body');
+
+    // Populate the modal with appointment details
+    modalBody.innerHTML = `
+        <h5 class="detail-title">Appointment Details</h5>
+        <div class="para">
+        <p><strong>Service Name:</strong> ${appointment.serviceName}</p>
+        <p><strong>User Name:</strong> ${appointment.userDetails.firstName} ${appointment.userDetails.lastName}</p>
+        <p><strong>Email:</strong> ${appointment.userDetails.email}</p>
+        <p><strong>Phone Number:</strong> ${appointment.userDetails.phoneNumber}</p>
+        <p><strong>Appointment Date:</strong> ${appointment.appointmentDate}</p>
+        <p><strong>Appointment Time:</strong> ${appointment.appointmentTime}</p>
+        <p><strong>Mechanic:</strong> ${appointment.mechanic}</p>
+        <p><strong>Status:</strong> ${appointment.status}</p></div>
+    `;
+
+    // Display the modal
+    modal.style.display = 'block';
+}
+
+// Close the modal when clicking on the close button
+document.querySelector('.close-btn').addEventListener('click', function() {
+    document.getElementById('appointmentModal').style.display = 'none';
+});
+
+// Close the modal if user clicks outside the modal
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('appointmentModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+
+
+// Function to handle appointment deletion
+async function deleteAppointment(id) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/appointments/${id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Failed to delete appointment');
+        alert('Appointment deleted successfully!');
+        loadAppointmentsSection(); // Reload the appointments section after deletion
+    } catch (error) {
+        console.error('Error deleting appointment:', error);
+        alert('Failed to delete appointment. Please try again.');
+    }
 }
 
 
-// Function to delete an appointment
+// Function to handle appointment deletion
 async function deleteAppointment(id) {
     try {
-        const response = await fetch(`${appointmentAPI_URL}/${id}`, {
+        const response = await fetch(`http://localhost:3000/api/appointments/${id}`, {
             method: 'DELETE',
         });
         if (!response.ok) throw new Error('Failed to delete appointment');
@@ -257,9 +297,7 @@ function renderUsersTable(users) {
             <td>${user.role}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="edit-btn" onclick="editUser('${user._id}')">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
+                    
                     <button class="delete-btn" onclick="deleteUser('${user._id}')">
                         <i class="fas fa-trash"></i> Delete
                     </button>
@@ -274,69 +312,6 @@ function renderUsersTable(users) {
     dynamicContent.appendChild(table);
 }
 
-// Edit User: Open Modal and Populate Data
-async function editUser(userId) {
-    try {
-        // Fetch user data from the server
-        const response = await fetch(`${API_URL}/${userId}`);
-        if (!response.ok) throw new Error('Failed to fetch user data');
-
-        const user = await response.json();
-
-        // Populate modal form with user data
-        document.getElementById('modalTitle').textContent = 'Edit User';
-        document.getElementById('name').value = `${user.firstName} ${user.lastName}`;
-        document.getElementById('email').value = user.email;
-        document.getElementById('phone').value = user.phoneNumber;
-        document.getElementById('role').value = user.role;
-
-        // Show the modal
-        document.getElementById('userModal').style.display = 'block';
-
-        // Set up the form submission logic
-        const userForm = document.getElementById('userForm');
-        userForm.onsubmit = async (event) => {
-            event.preventDefault(); // Prevent form submission
-
-            const fullName = document.getElementById('name').value.split(' ');
-            const firstName = fullName[0];
-            const lastName = fullName.slice(1).join(' ');
-            const email = document.getElementById('email').value;
-            const phoneNumber = document.getElementById('phone').value;
-            const role = document.getElementById('role').value;
-
-            const updatedUser = { firstName, lastName, email, phoneNumber, role };
-
-            try {
-                const updateResponse = await fetch(`${API_URL}/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedUser),
-                });
-
-                if (!updateResponse.ok) throw new Error('Failed to update user');
-
-                alert('User updated successfully!');
-                closeUserModal();
-                loadUsersSection(); // Refresh the users table
-            } catch (error) {
-                console.error('Error updating user:', error);
-                alert('Failed to update user. Please try again.');
-            }
-        };
-    } catch (error) {
-        console.error('Error fetching user for edit:', error);
-        alert('Failed to fetch user data. Please try again.');
-    }
-}
-
-// Close Modal
-function closeUserModal() {
-    document.getElementById('userModal').style.display = 'none';
-    document.getElementById('userForm').onsubmit = null; // Remove previous submission logic
-}
 
 // Delete User
 async function deleteUser(userId) {

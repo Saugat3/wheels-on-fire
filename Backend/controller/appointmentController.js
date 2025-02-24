@@ -1,38 +1,55 @@
 const Appointment = require('../models/appointmentModel');
+const User = require('../models/user.model'); // Import User model
 
 // Create a new appointment
 const createAppointment = async (req, res) => {
   try {
-        const { serviceName, vehicleCompany, vehicleModel, vehicleYear, vehicleNumber, appointmentDate, appointmentTime, mechanic } = req.body;
-        
-        // Check if required data is present
-        if (!serviceName || !vehicleCompany || !vehicleModel || !vehicleYear || !vehicleNumber || !appointmentDate || !appointmentTime || !mechanic) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
-        const newAppointment = new Appointment({
-            serviceName,
-            vehicleCompany,
-            vehicleModel,
-            vehicleYear,
-            vehicleNumber,
-            appointmentDate,
-            appointmentTime,
-            mechanic
-        });
-
-        await newAppointment.save();
-        res.status(201).json({ message: 'Appointment scheduled successfully' });
-    } catch (error) {
-        console.error('Error creating appointment:', error);
-        res.status(500).json({ message: 'Error creating appointment' });
+    const { userId, serviceName, vehicleCompany, vehicleModel, vehicleYear, vehicleNumber, appointmentDate, appointmentTime, mechanic } = req.body;
+    
+    // Check if required data is present
+    if (!userId || !serviceName || !vehicleCompany || !vehicleModel || !vehicleYear || !vehicleNumber || !appointmentDate || !appointmentTime || !mechanic) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
+
+    // Fetch user details by userId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Create a new appointment and save user details
+    const newAppointment = new Appointment({
+      serviceName,
+      vehicleCompany,
+      vehicleModel,
+      vehicleYear,
+      vehicleNumber,
+      appointmentDate,
+      appointmentTime,
+      mechanic,
+      user: userId,  // Store user ID
+      userDetails: {  // Store user details
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+      }
+    });
+
+    await newAppointment.save();
+    res.status(201).json({ message: 'Appointment scheduled successfully', appointment: newAppointment });
+  } catch (error) {
+    console.error('Error creating appointment:', error);
+    res.status(500).json({ message: 'Error creating appointment' });
+  }
 };
 
 // Get all appointments
 const getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find().populate('mechanic');
+    const appointments = await Appointment.find()
+      .populate('user', 'firstName lastName phoneNumber email') // Populate user details
+      .populate('mechanic');
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving appointments', error: error.message });
@@ -43,7 +60,9 @@ const getAllAppointments = async (req, res) => {
 const getAppointmentById = async (req, res) => {
   const { id } = req.params;
   try {
-    const appointment = await Appointment.findById(id).populate('mechanic');
+    const appointment = await Appointment.findById(id)
+      .populate('user', 'firstName lastName phoneNumber email')
+      .populate('mechanic');
     if (!appointment) {
       return res.status(404).json({ message: 'Appointment not found' });
     }

@@ -1,75 +1,82 @@
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Page loaded successfully!");
-});
-// Add a click event listener to the button
-document.getElementById("bookServiceButton").addEventListener("click", function() {
-    // Redirect to services.html
-    window.location.href = "services.html";
-  });
- // Function to open login or signup overlay
- function toggleOverlay(type) {
-    const loginOverlay = document.getElementById('login-overlay');
-    const signupOverlay = document.getElementById('signup-overlay');
 
-    // Hide both overlays first
-    loginOverlay.style.display = 'none';
-    signupOverlay.style.display = 'none';
+        // Function to open login, signup, or verification overlay
+        function toggleOverlay(type) {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
+            const verificationOverlay = document.getElementById('verification-overlay');
 
-    // Show the clicked overlay
-    if (type === 'login') {
-        loginOverlay.style.display = 'flex';
-    } else if (type === 'signup') {
-        signupOverlay.style.display = 'flex';
-    }
-}
+            // Hide all overlays first
+            loginOverlay.style.display = 'none';
+            signupOverlay.style.display = 'none';
+            verificationOverlay.style.display = 'none';
 
-// Close overlay function to hide both login and signup overlays
-function closeOverlays() {
-    const loginOverlay = document.getElementById('login-overlay');
-    const signupOverlay = document.getElementById('signup-overlay');
-    
-    loginOverlay.style.display = 'none';
-    signupOverlay.style.display = 'none';
-}
+            // Show the appropriate overlay based on the type
+            if (type === 'login') {
+                loginOverlay.style.display = 'flex';
+            } else if (type === 'signup') {
+                signupOverlay.style.display = 'flex';
+            } else if (type === 'verification') {
+                verificationOverlay.style.display = 'flex';
+            }
+        }
 
-// Function to toggle password visibility for login/signup
-function togglePassword(type) {
-    let passwordField, eyeIcon;
-    if (type === 'signup') {
-        passwordField = document.getElementById('signup-password');
-        eyeIcon = document.getElementById('signup-eye');
-    } else if (type === 'signup-confirm') {
-        passwordField = document.getElementById('signup-confirm-password');
-        eyeIcon = document.getElementById('signup-confirm-eye');
-    } else if (type === 'login') {
-        passwordField = document.getElementById('login-password');
-        eyeIcon = document.getElementById('login-eye');
-    }
+        // Close overlay function to hide both login, signup, and verification overlays
+        function closeOverlays() {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
+            const verificationOverlay = document.getElementById('verification-overlay');
+            
+            loginOverlay.style.display = 'none';
+            signupOverlay.style.display = 'none';
+            verificationOverlay.style.display = 'none';
+        }
 
-    if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else {
-        passwordField.type = 'password';
-        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-    }
-}
+        // Function to toggle password visibility for login/signup
+        function togglePassword(type) {
+            let passwordField, eyeIcon;
+            
+            // For signup password visibility toggle
+            if (type === 'signup') {
+                passwordField = document.getElementById('signup-password');
+                eyeIcon = document.getElementById('signup-eye');
+            } 
+            // For signup confirm password visibility toggle
+            else if (type === 'signup-confirm') {
+                passwordField = document.getElementById('signup-confirm-password');
+                eyeIcon = document.getElementById('signup-confirm-eye');
+            } 
+            // For login password visibility toggle
+            else if (type === 'login') {
+                passwordField = document.getElementById('login-password');
+                eyeIcon = document.getElementById('login-eye');
+            }
 
-// Add event listeners to close buttons to close the respective overlay
-document.querySelectorAll('.close-btn').forEach(button => {
-    button.addEventListener('click', closeOverlays);
-});
+            // Toggle the password field visibility and change the eye icon
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
 
-// Optional: Close overlays when clicking outside the overlay content
-window.addEventListener('click', function(event) {
-    const loginOverlay = document.getElementById('login-overlay');
-    const signupOverlay = document.getElementById('signup-overlay');
-    
-    // Close the overlay if clicking outside of the overlay content area
-    if (event.target === loginOverlay || event.target === signupOverlay) {
-        closeOverlays();
-    }
-});
+        // Add event listeners to close buttons to close the respective overlay
+        document.querySelectorAll('.close-btn').forEach(button => {
+            button.addEventListener('click', closeOverlays);
+        });
+
+        //Close overlays when clicking outside the overlay content
+        window.addEventListener('click', function(event) {
+            const loginOverlay = document.getElementById('login-overlay');
+            const signupOverlay = document.getElementById('signup-overlay');
+            const verificationOverlay = document.getElementById('verification-overlay');
+            
+            // Close the overlay if clicking outside of the overlay content area
+            if (event.target === loginOverlay || event.target === signupOverlay || event.target === verificationOverlay) {
+                closeOverlays();
+            }
+        });
 
 document.addEventListener('mousemove', function(event) {
     const glow = document.querySelector('.green-glow');

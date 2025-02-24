@@ -390,6 +390,158 @@ label {
     font-weight: bold;
     font-style: normal;
 }
+/* Verification Overlay Background */
+
+#verification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Verification Container Styling */
+
+#verification-overlay .verification-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 800px; 
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Wrapper */
+
+#verification-overlay .content-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Image Container */
+
+#verification-overlay .image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px; 
+}
+
+#verification-overlay .image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+/* Verification Content */
+
+#verification-overlay .verification-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    padding-left: 25px;
+    padding-right: 20px;
+}
+
+/* Close Button for Verification */
+
+#verification-overlay .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+}
+
+#verification-overlay .close-btn:hover {
+    color: #1A73E8;
+}
+
+/* Title and Description */
+
+#verification-overlay h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#verification-overlay p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* Verification Input Field */
+
+#verification-overlay .form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#verification-overlay .form-group label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+#verification-overlay .form-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#verification-overlay .form-input:focus {
+    border-color: #027223;
+}
+
+/* Verification Button Styling */
+
+#verification-overlay .verification-btn {
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);    width: 100%;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#verification-overlay .verification-btn:hover {
+    background-color: #056302;
+    transform: translateY(-2px); 
+}
+
+#verification-overlay .verification-btn:active {
+    transform: translateY(0);
+}
+
+/* Vertical Line Styling */
+
+#verification-overlay .vertical-line {
+    width: 0.5px;
+    background-color: #adadad;
+    margin: 0 20px;
+}
 
 .hero h1 {
     top: -30%;

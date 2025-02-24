@@ -53,7 +53,7 @@
                     <input type="password" id="login-password" placeholder="Password" class="form-input" required>
                     <i class="fa-solid fa-eye" id="login-eye" onclick="togglePassword('login')"></i>
                 </div>
-                <a href="#" class="forgot-password">Forgot password?</a>
+                <a href="forgetPassword.html" class="forgot-password">Forgot password?</a>
                 <button type="submit" class="login-btn">Login</button>
                 <div class="signup-prompt">
                     <p>Don't have an account? <a href="#" class="signup-link" onclick="toggleOverlay('signup')">Signup</a></p>
@@ -62,53 +62,76 @@
         </div>
     </div>
 
-   <!-- Signup Overlay -->
-    <div id="signup-overlay" class="signup-overlay">
-        <div class="signup-container">
-            <span class="close-btn" onclick="toggleOverlay('login')"><i class="fa-solid fa-x"></i></span>
-            <h2>Account Signup</h2>
-            <p>Fill in the details to create your account</p>
-            <form action="#" method="post">
-                <div class="form-group name-container">
-                    <div class="name-field">
-                        <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" placeholder="First Name" class="form-input" required>
+  <!-- Signup Overlay -->
+  <div id="signup-overlay" class="signup-overlay">
+    <div class="signup-container">
+        <span class="close-btn" onclick="toggleOverlay('login')"><i class="fa-solid fa-x"></i></span>
+        <h2>Account Signup</h2>
+        <p>Fill in the details to create your account</p>
+        <form action="#" method="post">
+            <div class="form-group name-container">
+                <div class="name-field">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" placeholder="First Name" class="form-input" required>
+                </div>
+                <div class="name-field">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" placeholder="Last Name" class="form-input" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" placeholder="example@example.com" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-phone">Phone Number</label>
+                <input type="tel" id="signup-phone" placeholder="Phone Number" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-address">Address</label>
+                <input type="text" id="signup-address" placeholder="Address" class="form-input" required>
+            </div>
+            <div class="form-group password-container">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" placeholder="Password" class="form-input" required>
+                <i class="fa-solid fa-eye" id="signup-eye" onclick="togglePassword('signup')"></i>
+            </div>
+            <div class="form-group password-container">
+                <label for="signup-confirm-password">Confirm Password</label>
+                <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="form-input" required>
+                <i class="fa-solid fa-eye" id="signup-confirm-eye" onclick="togglePassword('signup-confirm')"></i>
+            </div>
+            <button type="submit" class="signup-btn">Sign Up</button>
+            <div class="login-prompt">
+                <p>Already have an account? <a href="#" class="login-link" onclick="toggleOverlay('login')">Login</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Verification Overlay -->
+<div id="verification-overlay" class="verification-overlay">
+    <div class="verification-container">
+        <span class="close-btn" onclick="toggleOverlay('verification')"><i class="fa-solid fa-x"></i></span>
+        <div class="content-wrapper">
+            <div class="image-container">
+                <img src="Images/sent-message-animate.svg" alt="Left Side Image">
+            </div>
+            <div class="vertical-line"></div>
+            <div class="verification-content">
+                <h2>Verify Your Email</h2>
+                <p>Please enter the verification code sent to your email</p>
+                <form action="#" method="post" id="verification-form">
+                    <div class="form-group">
+                        <label for="verification-code">Verification Code</label>
+                        <input type="text" id="verification-code" placeholder="Enter code" class="form-input" required>
                     </div>
-                    <div class="name-field">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" placeholder="Last Name" class="form-input" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" placeholder="example@example.com" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-phone">Phone Number</label>
-                    <input type="tel" id="signup-phone" placeholder="Phone Number" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-address">Address</label>
-                    <input type="text" id="signup-address" placeholder="Address" class="form-input" required>
-                </div>
-                <div class="form-group password-container">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" placeholder="Password" class="form-input" required>
-                    <i class="fa-solid fa-eye" id="signup-eye" onclick="togglePassword('signup')"></i>
-                </div>
-                <div class="form-group password-container">
-                    <label for="signup-confirm-password">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="form-input" required>
-                    <i class="fa-solid fa-eye" id="signup-confirm-eye" onclick="togglePassword('signup-confirm')"></i>
-                </div>
-                <button type="submit" class="signup-btn">Sign Up</button>
-                <div class="login-prompt">
-                    <p>Already have an account? <a href="#" class="login-link" onclick="toggleOverlay('login')">Login</a></p>
-                </div>
-            </form>
+                    <button type="submit" class="verification-btn">Verify</button>
+                </form>
+            </div>
         </div>
     </div>
-    
+</div>
 
     <!-- Hero Section -->
     

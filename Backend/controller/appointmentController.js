@@ -1,4 +1,5 @@
 const Appointment = require('../models/appointmentModel');
+const { sendCancellationEmail } = require('../emailService');
 const User = require('../models/user.model'); // Import User model
 
 // Create a new appointment
@@ -114,20 +115,49 @@ const deleteAppointment = async (req, res) => {
 };
 
 // Update the status of an appointment
+
 const updateStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
   try {
-    const updatedAppointment = await Appointment.findByIdAndUpdate(id, { status }, { new: true });
+    const updatedAppointment = await Appointment.findByIdAndUpdate(
+      id, 
+      { status }, 
+      { new: true }
+    ).populate('user', 'firstName email');
+
     if (!updatedAppointment) {
       return res.status(404).json({ message: 'Appointment not found' });
     }
-    res.status(200).json({ message: 'Appointment status updated', updatedAppointment });
+
+    // Send cancellation email if status changed to Cancelled
+    if (status === 'Cancelled') {
+      await sendCancellationEmail(
+        updatedAppointment.user.email,
+        updatedAppointment.user.firstName,
+        {
+          serviceName: updatedAppointment.serviceName,
+          appointmentDate: updatedAppointment.appointmentDate,
+          appointmentTime: updatedAppointment.appointmentTime,
+          vehicleCompany: updatedAppointment.vehicleCompany,
+          vehicleModel: updatedAppointment.vehicleModel
+        }
+      );
+    }
+
+    res.status(200).json({ 
+      message: 'Appointment status updated', 
+      updatedAppointment 
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error updating appointment status', error: error.message });
+    res.status(500).json({ 
+      message: 'Error updating appointment status', 
+      error: error.message 
+    });
   }
 };
+
 
 module.exports = {
   createAppointment,

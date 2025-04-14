@@ -1,0 +1,474 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #fff;
+    background-color: #1c1921;
+}
+
+/* Header */
+header {
+    top:0;
+    position: fixed;
+    z-index: 999;
+    background-color: #1C1921; /* Match the dark background color */
+    padding: 15px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+    width: 100vw;
+}
+
+.logo {
+    display: flex;
+}
+
+.logo img {
+    height: 60px; /* Adjust size as needed */
+}
+
+nav {
+    display: flex;
+    gap: 50px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #d4ffd4; /* Hover color */
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    font-family: 'Gabriel Sans', sans-serif;
+    padding: 10px 20px;
+    background-color: #0d8a0d;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn:hover {
+    background-color: #14a014;
+}
+
+.login-button {
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #181818;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #d4ffd4;
+}
+
+.login-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 10px 5%;
+}
+
+.login-container {
+    background-color: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #000;
+}
+
+.logo-container {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.login-logo {
+    width: 25px;
+    height: 40px;
+    margin-bottom: 0px;
+    
+}
+
+.company-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    padding-left: 10px;    
+}
+
+h2 {
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+p {
+    text-align: justify;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    color: #048219;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background: #048219;
+}
+
+.signup-prompt {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signup-prompt p {
+    font-size: 14px;
+    color: #555;
+}
+
+.signup-link {
+    color: #048219;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+/* signup overlay */
+
+.swal2-container {
+    z-index: 9999 !important;
+}
+
+
+.signup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.signup-container {
+    background-color: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+}
+
+h2 {
+    text-align: left;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 22px;
+}
+
+p {
+    text-align: justify;
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px; 
+    margin: 8px 0; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.name-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.name-field {
+    width: 48%;
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    align-items: center;
+    top: 65%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #000;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #0E8F21 0%, #0DBF2A 50%, #04290A 150%);
+    color: white;
+    border: none;
+    border-radius: 35px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    background: #048219;
+}
+
+.login-prompt {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login-prompt p {
+    font-size: 14px;
+    color: #555;
+}
+
+.login-link {
+    color: #048219;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+@font-face {
+    font-family: 'Gabriel Sans';
+    src: url('./Images/gabrielsans.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gabriel Sans Normal';
+    src: url('./Images/gabrielsansnromal.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Container styles */
+.container {
+    position: relative;
+    max-width: 600px;
+    padding: 20px;
+    left: 110px;
+    top: 100px;
+}
+
+/* Title styles */
+.title {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #03b020;
+}
+
+/* Subtitle styles */
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+/* Input container styles */
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+    top: 20px;
+}
+
+/* Label styles */
+.label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #c5c5c5; /* Use bottom border only */
+    font-size: 16px;
+    background-color: transparent; /* Transparent background */
+    transition: border-color 0.3s; /* Add transition effect for border color change */
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+
+}
+
+/* Change border color on focus */
+.input:focus {
+    outline: none;
+    border-color: #048219;
+}
+
+
+/* Textarea styles */
+textarea.input {
+    resize: vertical;
+}
+
+/* Button styles */
+.contact-button {
+    position: relative;
+    top: 10px;
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #048219 ;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact-button:hover {
+    background-color: #048219;
+}
+.image-container {
+    position: absolute;
+    top: 5%;
+    right: 0;
+    left: 700px;
+    width: 100%; /* Adjust the width as needed */
+    height: 100%;
+    padding: 20px 20px;
+    background-color: #fff;
+    border-radius: 60px;
+}
+
+.image-container img {
+    size: 80;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the entire container */
+}

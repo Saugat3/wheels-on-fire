@@ -20,6 +20,13 @@ connectDB();
 
 // Routes
 app.use('/api', routes);
+// Serve static frontend (e.g., index.html)
+app.use(express.static(path.join(__dirname, '../Frontend')));
+
+// Fallback route to serve index.html on unknown paths (like '/')
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/index.html'));
+});
 
 // Start Server
 const PORT = 3000;

@@ -78,19 +78,65 @@
             }
         });
 
-document.addEventListener('mousemove', function(event) {
-    const glow = document.querySelector('.green-glow');
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
 
-    // Set a transition to smoothly follow the cursor
-    glow.style.transition = 'left 0.3s ease, top 0.3s ease'; // 0.3s delay for smoother movement
+        // Create glow element if it doesn't exist
+let glow = document.querySelector('.green-glow');
+if (!glow) {
+    glow = document.createElement('div');
+    glow.className = 'green-glow';
+    document.body.appendChild(glow);
+    
+    // Add styles dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+    .green-glow {
+        position: fixed;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(10, 90, 6, 0.7) 0%, rgba(10, 90, 6, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        filter: blur(20px);
+        will-change: transform, opacity;
+        left: 0;
+        top: 0;
+        animation: pulse 2s infinite ease-in-out;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.95); }
+        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+        100% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.95); }
+    }
+    `;
+    document.head.appendChild(style);
+}
 
-    // Set the new position of the glow with a small delay
-    setTimeout(function() {
-        glow.style.left = mouseX - glow.offsetWidth / 2 + 'px';
-        glow.style.top = mouseY - glow.offsetHeight / 2 + 'px';
-    }, 50); // Slight delay before applying the position change
+// Track mouse position precisely with smooth animation
+let lastX = window.innerWidth/2;
+let lastY = window.innerHeight/2;
+
+function updateGlowPosition() {
+    const dx = lastX - parseFloat(glow.style.left);
+    const dy = lastY - parseFloat(glow.style.top);
+    
+    // Apply smooth movement (remove this if you want instant movement)
+    glow.style.left = `${parseFloat(glow.style.left) + dx * 0.1}px`;
+    glow.style.top = `${parseFloat(glow.style.top) + dy * 0.1}px`;
+    
+    requestAnimationFrame(updateGlowPosition);
+}
+
+document.addEventListener('mousemove', (e) => {
+    lastX = e.clientX;
+    lastY = e.clientY;
 });
 
+// Initialize position
+glow.style.left = `${lastX}px`;
+glow.style.top = `${lastY}px`;
 
+// Start animation loop
+updateGlowPosition();

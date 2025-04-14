@@ -33,45 +33,53 @@
             }
         }
 
-  // Render Mechanics Cards
+ // Render Mechanics Cards with enhanced styling
 function renderMechanicsCards(mechanics) {
     dynamicContent.innerHTML = ''; // Clear existing content
 
+    // Create and style the "Add New Mechanic" button
     const addMechanicBtn = document.createElement('button');
-    addMechanicBtn.textContent = 'Add New Mechanic';
+    addMechanicBtn.innerHTML = '<i class="fas fa-plus"></i> Add New Mechanic';
     addMechanicBtn.classList.add('add-mechanic-btn');
     addMechanicBtn.addEventListener('click', () => {
-        mechanicModal.style.display = 'block';
+        document.getElementById('mechanicModal').style.display = 'flex';
     });
-
-    // Append the button at the top of the container
     dynamicContent.appendChild(addMechanicBtn);
 
-    const stepsContainer = document.createElement('div');
-    stepsContainer.classList.add('steps-container'); // Add container to hold the cards
+    // Create cards container with grid layout
+    const mechanicsGrid = document.createElement('div');
+    mechanicsGrid.classList.add('mechanics-grid');
 
     mechanics.forEach(mechanic => {
         const card = document.createElement('div');
-        card.classList.add('step-card'); // Applying the step-card class for styling
+        card.classList.add('mechanic-card');
+        
         card.innerHTML = `
-            <img src="http://localhost:3000/${mechanic.photo}" alt="Mechanic Photo" style="width: 100%; border-radius: 10px; height: 150px; object-fit: cover;">
-            <h3>${mechanic.name}</h3>
-            <p><strong>Specialization:</strong> ${mechanic.specialization}</p>
-            <p><strong>Experience:</strong> ${mechanic.experience} years</p>
-            <p><strong>Description:</strong> ${mechanic.description}</p>
-            <div class="button-container">
-                <button class="edit-btn" onclick="editMechanic('${mechanic._id}')">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="delete-btn" onclick="deleteMechanic('${mechanic._id}')">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
+            <div class="card-header">
+                <img src="http://localhost:3000/${mechanic.photo}" alt="${mechanic.name}" class="mechanic-photo">
+                <h3 class="mechanic-name">${mechanic.name}</h3>
+                <span class="specialization-badge">${mechanic.specialization}</span>
+            </div>
+            <div class="card-body">
+                <div class="mechanic-info">
+                    <p><i class="fas fa-star"></i> <strong>Experience:</strong> ${mechanic.experience} years</p>
+                    <p><i class="fas fa-info-circle"></i> <strong>About:</strong> <br>${mechanic.description}</p>
+                </div>
+                <div class="card-actions">
+                    <button class="edit-btn" onclick="editMechanic('${mechanic._id}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="delete-btn" onclick="deleteMechanic('${mechanic._id}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
             </div>
         `;
-        stepsContainer.appendChild(card);
+        
+        mechanicsGrid.appendChild(card);
     });
 
-    dynamicContent.appendChild(stepsContainer); // Append the container holding all the cards
+    dynamicContent.appendChild(mechanicsGrid);
 }
 
 // Edit Mechanic

@@ -27,4 +27,24 @@ router.delete('/appointments/:id', deleteAppointment);
 // Update appointment status (for dropdown actions)
 router.put('/appointments/:id/status', updateStatus);
 
+router.get('/api/mechanics/availability', async (req, res) => {
+  try {
+      const { date, mechanicId } = req.query;
+      
+      // Get all appointments for this mechanic on this date
+      const appointments = await Appointment.find({
+          mechanic: mechanicId,
+          appointmentDate: new Date(date),
+          status: { $ne: 'Cancelled' } // Don't count cancelled appointments
+      });
+      
+      // Extract booked time slots
+      const bookedSlots = appointments.map(a => a.appointmentTime);
+      
+      res.json({ bookedSlots });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

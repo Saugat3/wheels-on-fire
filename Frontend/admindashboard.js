@@ -84,82 +84,261 @@ function renderAppointmentsTable(appointments) {
     dynamicContent.innerHTML = ''; // Clear existing content
 
     const table = document.createElement('table');
-    table.classList.add('appointments-table'); // Add a class for styling
+    table.classList.add('appointments-table');
 
-    // Updated headers to show user details
-    const headers = ['User Name', 'Service Name', 'Email', 'Phone Number', 'Status', 'Actions'];
-    const thead = document.createElement('thead');
+    // Create table headers
     const headerRow = document.createElement('tr');
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+    headerRow.innerHTML = `
+        <th>User Name</th>
+        <th>Service Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Status</th>
+        <th>Actions</th>
+    `;
+    table.appendChild(headerRow);
 
-    const tbody = document.createElement('tbody');
+    // Add rows for each appointment
     appointments.forEach(appointment => {
         const row = document.createElement('tr');
-
-        // Get user details from userDetails field in appointment
-        const userDetails = appointment.userDetails; 
-        
         row.innerHTML = `
-            <td>${userDetails.firstName} ${userDetails.lastName}</td>  <!-- User Name -->
+            <td>${appointment.userDetails.firstName} ${appointment.userDetails.lastName}</td>
             <td>${appointment.serviceName}</td>
-            <td>${userDetails.email}</td>  <!-- User Email -->
-            <td>${userDetails.phoneNumber}</td>  <!-- User Phone Number -->
-            <td>${appointment.status}</td> <!-- Status -->
+            <td>${appointment.userDetails.email}</td>
+            <td>${appointment.userDetails.phoneNumber}</td>
             <td>
-                <button class="details-btn" onclick='showAppointmentDetails(${JSON.stringify(appointment)})'>Show Details</button>
+                <select class="status-dropdown" data-id="${appointment._id}">
+                    <option value="Pending" ${appointment.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="In Progress" ${appointment.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                    <option value="Completed" ${appointment.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                    <option value="Cancelled" ${appointment.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                </select>
+            </td>
+            <td>
+                <button class="details-btn" onclick='showAppointmentDetails(${JSON.stringify(appointment)})'>Details</button>
                 <button class="delete-btn" onclick="deleteAppointment('${appointment._id}')">Delete</button>
             </td>
         `;
-
-        tbody.appendChild(row);
+        table.appendChild(row);
     });
 
-    table.appendChild(tbody);
     dynamicContent.appendChild(table);
+
+    // Add event listeners to all status dropdowns
+    document.querySelectorAll('.status-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('change', async function() {
+            const appointmentId = this.getAttribute('data-id');
+            const newStatus = this.value;
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/appointments/${appointmentId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) throw new Error('Failed to update status');
+                
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Status Updated',
+                    text: `Appointment status changed to ${newStatus}`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                
+                // Optional: Update the UI immediately without reload
+                const row = this.closest('tr');
+                row.style.backgroundColor = getStatusColor(newStatus);
+                
+            } catch (error) {
+                console.error('Error updating status:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: 'Could not update appointment status'
+                });
+                // Reset to original value
+                this.value = appointment.status;
+            }
+        });
+    });
 }
 
+// Helper function for status colors
+function getStatusColor(status) {
+    switch(status) {
+        case 'Pending': return 'rgba(255, 193, 7, 0.1)';
+        case 'In Progress': return 'rgba(0, 123, 255, 0.1)';
+        case 'Completed': return 'rgba(40, 167, 69, 0.1)';
+        case 'Cancelled': return 'rgba(220, 53, 69, 0.1)';
+        default: return 'transparent';
+    }
+}
 
 function showAppointmentDetails(appointment) {
     const modal = document.getElementById('appointmentModal');
     const modalBody = document.getElementById('modal-body');
+    
+    // Get status class
+    const statusClass = appointment.status.toLowerCase().replace(' ', '-');
+    
+    // Format the date
+    const formattedDate = new Date(appointment.appointmentDate).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
-    // Populate the modal with appointment details
+    // Create the modal content with all details
     modalBody.innerHTML = `
-        <h5 class="detail-title">Appointment Details</h5>
-        <div class="para">
-        <p><strong>Service Name:</strong> ${appointment.serviceName}</p>
-        <p><strong>User Name:</strong> ${appointment.userDetails.firstName} ${appointment.userDetails.lastName}</p>
-        <p><strong>Email:</strong> ${appointment.userDetails.email}</p>
-        <p><strong>Phone Number:</strong> ${appointment.userDetails.phoneNumber}</p>
-        <p><strong>Appointment Date:</strong> ${appointment.appointmentDate}</p>
-        <p><strong>Appointment Time:</strong> ${appointment.appointmentTime}</p>
-        <p><strong>Mechanic:</strong> ${appointment.mechanic}</p>
-        <p><strong>Status:</strong> ${appointment.status}</p></div>
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-calendar-check"></i>
+                Appointment Details
+            </h3>
+           
+        </div>
+        
+        <div class="modal-content-grid">
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Customer</span>
+                    <span class="detail-value">${appointment.userDetails.firstName} ${appointment.userDetails.lastName}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card email-card">
+                <div class="detail-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Email</span>
+                    <span class="detail-value email-value">${appointment.userDetails.email}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Phone</span>
+                    <span class="detail-value">${appointment.userDetails.phoneNumber}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Vehicle</span>
+                    <span class="detail-value">${appointment.vehicleCompany} ${appointment.vehicleModel} (${appointment.vehicleYear})</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Plate Number</span>
+                    <span class="detail-value">${appointment.vehicleNumber}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-wrench"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Service</span>
+                    <span class="detail-value">${appointment.serviceName}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">${formattedDate}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Time</span>
+                    <span class="detail-value">${appointment.appointmentTime}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Mechanic</span>
+                    <span class="detail-value">${appointment.mechanic}</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="detail-info">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value status-badge ${statusClass}">${appointment.status}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="modal-btn print-btn" onclick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </button>
+            <button class="modal-btn close-modal-btn">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
     `;
 
     // Display the modal
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // Add event listeners
+    document.querySelectorAll('.close-btn, .close-modal-btn').forEach(btn => {
+        btn.addEventListener('click', closeModal);
+    });
 }
 
-// Close the modal when clicking on the close button
-document.querySelector('.close-btn').addEventListener('click', function() {
-    document.getElementById('appointmentModal').style.display = 'none';
-});
+function closeModal() {
+    const modal = document.getElementById('appointmentModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
 
-// Close the modal if user clicks outside the modal
+// Close modal when clicking outside
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('appointmentModal');
     if (event.target === modal) {
-        modal.style.display = 'none';
+        closeModal();
     }
 });
-
 
 
 // Function to handle appointment deletion
@@ -341,3 +520,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+let usersList = []; // Will store users for dropdown
+
+async function openEmailComposer() {
+  // Load users if not already loaded
+  if (usersList.length === 0) {
+    try {
+      const response = await fetch(API_URL);
+      usersList = await response.json();
+      populateUserDropdown();
+    } catch (error) {
+      console.error('Error loading users:', error);
+      alert('Failed to load users');
+    }
+  }
+  
+  document.getElementById('emailComposerModal').style.display = 'flex';
+}
+
+function closeEmailComposer() {
+  document.getElementById('emailComposerModal').style.display = 'none';
+}
+
+function populateUserDropdown() {
+  const select = document.getElementById('userSelect');
+  select.innerHTML = '';
+  
+  usersList.forEach(user => {
+    const option = document.createElement('option');
+    option.value = user.email;
+    option.textContent = `${user.firstName} ${user.lastName} (${user.email})`;
+    select.appendChild(option);
+  });
+}
+
+// Handle recipient type change
+document.getElementById('recipientType').addEventListener('change', function() {
+  const type = this.value;
+  document.getElementById('singleUserGroup').style.display = 
+    type === 'single' ? 'block' : 'none';
+  document.getElementById('customEmailGroup').style.display = 
+    type === 'custom' ? 'block' : 'none';
+});
+
+// Handle form submission
+document.getElementById('emailForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const type = document.getElementById('recipientType').value;
+    let toEmail = '';
+    
+    if (type === 'single') {
+      toEmail = document.getElementById('userSelect').value;
+    } else if (type === 'custom') {
+      toEmail = document.getElementById('customEmail').value;
+    } else if (type === 'all') {
+      toEmail = usersList.map(user => user.email).join(',');
+    }
+    
+    const subject = document.getElementById('emailSubject').value;
+    const content = document.getElementById('emailContent').value;
+    
+    try {
+      const response = await fetch('http://localhost:3000/api/admin/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: toEmail,
+          subject,
+          content
+        })
+      });
+      
+      // First check if response has content
+      const text = await response.text();
+      let result = {};
+      
+      try {
+        result = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.log('Non-JSON response:', text);
+      }
+      
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Email Sent',
+          text: 'Your email has been sent successfully',
+          timer: 2000
+        });
+        closeEmailComposer();
+      } else {
+        throw new Error(result.message || text || 'Failed to send email');
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.message
+      });
+    }
+  });

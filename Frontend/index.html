@@ -14,23 +14,51 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">
-            <img src="./Images/logo.png" alt="Wheels On Fire" />
-        </div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="mechanics.html">Mechanics</a>
-            <a href="services.html">Services</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-        <div class="buttons">
-            <button class="btn" id="bookServiceButton" onclick="window.location.href='services.html'">BOOK A SERVICE</button>            <button class="login-button" onclick="toggleOverlay('login')">
+   <!-- Header -->
+<header>
+    <div class="logo">
+        <img src="./Images/logo.png" alt="Wheels On Fire" />
+    </div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="mechanics.html">Mechanics</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    <div class="buttons" id="authSection">
+        <!-- JS will populate this -->
+    </div>
+</header>
+
+<script>
+    // Check if the user is logged in by validating the token
+    function isLoggedIn() {
+        const token = localStorage.getItem("token");
+        return !!token;
+    }
+
+    const authSection = document.getElementById("authSection");
+
+    if (isLoggedIn()) {
+        // Assuming user's name is stored separately
+        const userName = localStorage.getItem("userName") || "User";
+
+        authSection.innerHTML = `
+            <button class="btn" id="bookServiceButton" onclick="window.location.href='services.html'">BOOK A SERVICE</button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        `;
+    } else {
+        authSection.innerHTML = `
+            <button class="btn" id="bookServiceButton" onclick="window.location.href='services.html'">BOOK A SERVICE</button>
+            <button class="login-button" onclick="toggleOverlay('login')">
                 Login <i class="fa-solid fa-arrow-right-to-bracket"></i>
             </button>
-        </div>
-    </header>
+        `;
+    }
+</script>
+
 
      <!-- Login Overlay -->
      <div id="login-overlay" class="login-overlay">

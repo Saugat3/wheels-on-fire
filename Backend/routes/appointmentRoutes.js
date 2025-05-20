@@ -29,18 +29,16 @@ router.put('/appointments/:id/status', updateStatus);
 
 router.get('/api/mechanics/availability', async (req, res) => {
   try {
-      const { date, mechanicId } = req.query;
+      const { date, mechanicName } = req.query;
       
       // Get all appointments for this mechanic on this date
       const appointments = await Appointment.find({
-          mechanic: mechanicId,
+          mechanic: mechanicName, // Now storing mechanic name directly
           appointmentDate: new Date(date),
-          status: { $ne: 'Cancelled' } // Don't count cancelled appointments
+          status: { $ne: 'Cancelled' }
       });
       
-      // Extract booked time slots
       const bookedSlots = appointments.map(a => a.appointmentTime);
-      
       res.json({ bookedSlots });
   } catch (error) {
       res.status(500).json({ error: error.message });

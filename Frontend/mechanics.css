@@ -380,7 +380,7 @@ label {
 }
 .h4{
     font-family: 'Gabriel Sans', sans-serif;
-
+    text-align: center;
     font-size: 40px;
     font-weight: 600;
     color: transparent;
@@ -392,11 +392,12 @@ label {
     color: white;
     font-size: 1rem;
     margin-bottom: 60px;
+    text-align: center;
 }
 
 .mechanics-container {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 50px; /* Matches steps-container */
     margin-top: 20px;

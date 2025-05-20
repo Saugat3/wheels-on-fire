@@ -51,6 +51,56 @@ const updateUserById = async (req, res) => {
   }
 };
 
+// In your user controller (add this if not existing)
+exports.updateUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { firstName, lastName, phoneNumber, address, currentPassword, newPassword } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Update basic profile info
+        user.firstName = firstName || user.firstName;
+        user.lastName = lastName || user.lastName;
+        user.phoneNumber = phoneNumber || user.phoneNumber;
+        user.address = address || user.address;
+
+        // Handle password change if requested
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ error: 'Current password is required to change password' });
+            }
+            
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ error: 'Current password is incorrect' });
+            }
+            
+            const saltRounds = 10;
+            user.password = await bcrypt.hash(newPassword, saltRounds);
+        }
+
+        await user.save();
+
+        res.json({
+            message: 'Profile updated successfully',
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                address: user.address
+            }
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
 module.exports = {
   getAllUsers,
   getUserById,
